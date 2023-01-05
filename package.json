@@ -10,7 +10,9 @@
   "keywords": [
     "webfinger",
     "JSON Resource Descriptor",
-    "jrd"
+    "jrd",
+    "host-meta",
+    "host-meta.json"
   ],
   "author": "Matthew Duffy <mattduffy@gmail.com>",
   "license": "ISC",
