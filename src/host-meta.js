@@ -17,7 +17,7 @@ const debug = Debug('host-meta:class')
  * @author Matthew Duffy <mattduffy@gmail.com>
  */
 
-export class Hostmeta extends EventEmitter {
+export default class Hostmeta extends EventEmitter {
   /**
    * Create an instance of Host-meta
    */
