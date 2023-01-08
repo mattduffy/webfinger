@@ -1,3 +1,5 @@
+## Design and Development
+- [ ] implement learnings ...
 - [ ] reference: [.well-known/webfinger](https://www.rfc-editor.org/rfc/rfc7033) rfc7033 definition
 - [ ] reference: [acct: URI](https://www.rfc-editor.org/rfc/rfc7565) rfc7565 definition
 - [ ] reference: [Mastodon webfinger](https://docs.joinmastodon.org/spec/webfinger/)
@@ -14,4 +16,10 @@
 - [ ] - create unit test to validate json formatting
 - [ ] - create unit test to validate data retrieval
 - [ ] - create integration test with Mocha+Chai to validate proper HTTP responses
-- [ ] implement learnings ...
+
+## TESTING
+- [ ] set up Mocha test framework
+- [ ] set up Chai, Chai HTTP
+- [ ] set up Koa testing / stub app server
+- [ ] [live webfinger acct: URI](https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems)
+- [ ] 

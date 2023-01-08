@@ -4,25 +4,17 @@
  * @file src/index.js The Webfinger class definition file.
  */
 
-import EventEmitter from 'node:events'
 import Debug from 'debug'
+import get from './get.js'
+// import hostmeta from './host-meta.js'
+// import webfinger from './webfinger.js'
 
-const debug = Debug('webfinger:class')
+const debug = Debug('webfinger:main')
+debug('Webfinger::Main')
+get('https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems')
 
-/**
- * A class providing Webfinger rfc-7033 support.
- * @summary A class providing Webfinger rfc-7033 support.
- * @class Webfinger
- * @extends EventEmitter
- * @author Matthew Duffy <mattduffy@gmail.com>
- */
-
-export class Webfinger extends EventEmitter {
-  /**
-   * Create an instance of Webfinger
-   */
-  constructor() {
-    super()
-    debug('Webfinger constructor')
-  }
+export {
+  get,
+//   hostmeta,
+//   webfinger,
 }

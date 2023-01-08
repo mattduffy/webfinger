@@ -2,20 +2,29 @@
   "name": "@mattduffy/webfinger",
   "version": "1.0.0",
   "description": "A webfinger client/server.",
-  "type": "module",
+  "author": "Matthew Duffy <mattduffy@gmail.com>",
+  "license": "ISC",
   "main": "index.js",
+  "type": "module",
+  "homepage": "https://github.com/mattduffy/webfnger#readme",
+  "respository": {
+    "type": "git",
+    "url": "git+https://github.com/mattduffy/webfinger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mattduffy/webfinger/issues"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./get": "./src/get.js",
+    "./webfinger": "./src/webfinger.js",
+    "./host-meta": "./src/host-meta.js",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "webfinger",
-    "JSON Resource Descriptor",
-    "jrd",
-    "host-meta",
-    "host-meta.json"
-  ],
-  "author": "Matthew Duffy <mattduffy@gmail.com>",
-  "license": "ISC",
+  
   "devDependencies": {
     "chai": "4.3.7",
     "chai-http": "4.3.0",
@@ -26,5 +35,12 @@
   },
   "dependencies": {
     "debug": "4.3.4"
-  }
+  },
+  "keywords": [
+    "webfinger",
+    "JSON Resource Descriptor",
+    "jrd",
+    "host-meta",
+    "host-meta.json"
+  ]
 }
