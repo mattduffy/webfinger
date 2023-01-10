@@ -7,7 +7,9 @@
 import EventEmitter from 'node:events'
 import Debug from 'debug'
 
-const debug = Debug('host-meta:class')
+const error = Debug('host-meta:class:error')
+const log = Debug('host-meta:class:log')
+log.log = console.log.bind(console)
 
 /**
  * A class providing host-meta rfc-6415 support.
@@ -23,6 +25,6 @@ export default class Hostmeta extends EventEmitter {
    */
   constructor() {
     super()
-    debug('host-meta constructor')
+    log('host-meta constructor')
   }
 }

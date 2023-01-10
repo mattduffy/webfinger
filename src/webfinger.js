@@ -7,7 +7,9 @@
 import EventEmitter from 'node:events'
 import Debug from 'debug'
 
-const debug = Debug('webfinger:class')
+const error = Debug('webfinger:class:error')
+const log = Debug('webfinger:class:log')
+log.log = console.log.bind(console)
 
 /**
  * A class providing Webfinger rfc-7033 support.
@@ -25,7 +27,7 @@ export default class Webfinger extends EventEmitter {
    */
   constructor() {
     super()
-    debug('Webfinger constructor')
+    log('Webfinger constructor')
   }
 
   /**
