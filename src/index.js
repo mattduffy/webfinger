@@ -14,7 +14,7 @@ const log = Debug('webfinger:main:log')
 log.log = console.log.bind(console)
 log('Hi, from Webfinger:index')
 
-get('https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems')
+// get('https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems')
 
 const webfinger = new Webfinger()
 // const hostmeta = new Hostmeta()
