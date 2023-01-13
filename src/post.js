@@ -1,49 +1,51 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/get.js A simple HTTPS GET interface.
+ * @file src/post.js A simple HTTPS POST interface.
  */
 
 import Debug from 'debug'
 import http from 'node:http'
 import https from 'node:https'
 
-const error = Debug('webfinger:get:error')
-const log = Debug('webfinger:get:log')
+const error = Debug('webfinger:post:error')
+const log = Debug('webfinger:post:tlog')
 log.log = console.log.bind(console)
-log('Hi, from Webfinger:get')
+log('Hi, from Webfinger:post')
 /**
- * Make an HTTP(S) GET request to a given URL.
- * @summary Make an HTTP(S) GET request to a given URL.
+ * Make an HTTP(S) POST request to a given URL.
+ * @summary Make an HTTP(S) POST request to a given URL.
  * @author Matthew Duffy <mattduffy@gmail.com>
  * @async
  * @param { string|URL } q - Either a string containing the url or an instance of URL.
- * @param { object } opts - An object literal with options for how to perform GET request.
- * @return { Promise } A promise that should immediately resolve with the GET response or reject with error.
+ * @param { object } postData - Data to be POSTed to the provided URL.
+ * @param { object } opts - An object literal with options for how to perform POST request.
+ * @return { Promise } A promise that should immediately resolve with the POST response or reject with error.
  */
-export default async function get(q, opts = {}) {
-  log(`GETting ${q}`)
+export default async function post(q, postData = {}, opts = {}) {
   if (q === undefined) {
-    error('Missing parameter')
-    throw new Error('Missing required URL parameter. Usage: get(\'https://www.example.org\'[,options])')
+    error('Missing required URL parameter')
+    throw new Error('Missing required URL parameter. Usage: await post(\'https://www.example.org\', data[,options])')
   }
   const theUrl = (typeof q === 'string') ? new URL(q) : q
   log(theUrl)
   const proto = (theUrl.protocol === 'http:') ? http : https
   log(`${theUrl.protocol}`)
+  if (postData === undefined || Object.entries(postData).length === 0) {
+    error('Missing data parameter')
+    throw new Error('Missing required data paramter.')
+  }
   const options = {
     timeout: 5000,
     retries: 2,
     followRedirect: true,
+    method: 'POST',
+    agent: false,
     ...opts,
   }
   log(options)
   return new Promise((resolve, reject) => {
-    proto.get(theUrl, options, (response) => {
-      if (response === null || response === undefined) {
-        error(`${theUrl.protocol} response not valid`)
-        throw new Error(`${theUrl.protocol} response not valid`)
-      }
+    const request = proto.request(theUrl, options, (response) => {
       const payload = {}
       payload.content = ''
       payload.headers = response.headers
@@ -53,11 +55,6 @@ export default async function get(q, opts = {}) {
       payload.statusMessage = response.statusMessage
       log(`statusCode: ${response.statusCode}`)
       log(`statusMessage: ${response.statusMessage}`)
-
-      if (response.statusCode === 301) {
-        payload.redirect = true
-        payload.location = response.headers.location
-      }
       // collect the emitted chunks into the data array
       response.on('data', (chunk) => {
         data.push(chunk)
@@ -76,5 +73,7 @@ export default async function get(q, opts = {}) {
       error(e)
       reject(e)
     })
+    request.write(postData.body)
+    request.end()
   })
 }

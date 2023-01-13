@@ -6,6 +6,7 @@
 
 import Debug from 'debug'
 import get from './get.js'
+import post from './post.js'
 import Webfinger from './webfinger.js'
 // import Hostmeta from './host-meta.js'
 
@@ -14,13 +15,15 @@ const log = Debug('webfinger:main:log')
 log.log = console.log.bind(console)
 log('Hi, from Webfinger:index')
 
-// get('https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems')
+// await get('https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems')
+// await post()
 
 const webfinger = new Webfinger()
 // const hostmeta = new Hostmeta()
 
 export {
   get,
+  post,
   webfinger,
   // hostmeta,
 }

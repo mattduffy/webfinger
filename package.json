@@ -17,6 +17,7 @@
   "exports": {
     ".": "./src/index.js",
     "./get": "./src/get.js",
+    "./post": "./src/post.js",
     "./webfinger": "./src/webfinger.js",
     "./host-meta": "./src/host-meta.js",
     "./package.json": "./package.json"
