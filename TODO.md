@@ -18,6 +18,12 @@
 - [ ] - create unit test to validate json formatting
 - [ ] - create unit test to validate data retrieval
 - [ ] - create integration test with Mocha+Chai to validate proper HTTP responses
+- [ ] get: a functional wrapper around node:http(s) get function to be used by webfinger
+- [ ] - create unit test to send HTTP GET requests to a given URL
+- [ ] - create integration test with Mocha+Chai_Http to send GET requests
+- [ ] post: a functional wrapper around node:http(s) request function to be used by webfinger
+- [ ] - create unit test to send HTTP POST requests to a given URL
+- [ ] - create integration test with Mocha+Chai_Http to send POST requets
 
 ## TESTING
 - [ ] set up Mocha test framework

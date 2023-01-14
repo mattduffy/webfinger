@@ -35,6 +35,23 @@ export default async function post(q, postData = {}, opts = {}) {
     error('Missing data parameter')
     throw new Error('Missing required data paramter.')
   }
+  let content
+  let contentType
+  if (postData.form !== undefined && postData.form !== '') {
+    content = postData.form
+    contentType = 'application/x-www-form-urlencoded; charset=utf-8'
+  }
+  if (postData.text !== undefined && postData.text !== '') {
+    content = postData.text
+    contentType = 'text/plain; charset=utf-8'
+  } else if (postData.json !== undefined && postData.json !== '') {
+    content = postData.json
+    contentType = 'application/json'
+  } else if (postData.buffer !== undefined && postData.buffer instanceof Buffer) {
+    content = postData.buffer
+    contentType = 'application/octet-stream'
+  }
+
   const options = {
     timeout: 5000,
     retries: 2,
@@ -42,6 +59,10 @@ export default async function post(q, postData = {}, opts = {}) {
     method: 'POST',
     agent: false,
     ...opts,
+  }
+  options.headers = {
+    'content-type': contentType,
+    'x-custome-header': '@mattduffy/webfinger/post',
   }
   log(options)
   return new Promise((resolve, reject) => {
@@ -61,7 +82,6 @@ export default async function post(q, postData = {}, opts = {}) {
       })
       // when the stream ends, convert the chunks array into readable text
       response.on('end', () => {
-        // log('Resonse ended: ')
         if (response.headers['content-type'] && /json/.test(response.headers['content-type'])) {
           payload.content = JSON.parse(Buffer.concat(data).toString())
         } else if (response.headers['content-type'] && /text\/plain|html/i.test(response.headers['content-type'])) {
@@ -73,7 +93,7 @@ export default async function post(q, postData = {}, opts = {}) {
       error(e)
       reject(e)
     })
-    request.write(postData.body)
+    request.write(content)
     request.end()
   })
 }
