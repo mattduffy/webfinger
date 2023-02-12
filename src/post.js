@@ -9,7 +9,7 @@ import http from 'node:http'
 import https from 'node:https'
 
 const error = Debug('webfinger:post:error')
-const log = Debug('webfinger:post:tlog')
+const log = Debug('webfinger:post:log')
 log.log = console.log.bind(console)
 log('Hi, from Webfinger:post')
 /**
