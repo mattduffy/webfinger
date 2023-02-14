@@ -95,7 +95,15 @@ export default class Webfinger extends EventEmitter {
   }
 
   subject() {
-    this.#finger.subject = `acct:${this._username}@${this._host}`
+    const match = /^http[s]?:\/\/([A-Za-z0-9\\._-]+):?[0-9]{0,6}$/.exec(this._host)
+    let host
+    if (match) {
+      /* eslint-disable prefer-destructuring */
+      host = match[1]
+    } else {
+      host = this._host
+    }
+    this.#finger.subject = `acct:${this._username}@${host}`
   }
 
   aliases(alias) {
