@@ -1,27 +1,28 @@
 ## Design and Development
-- [ ] implement learnings ...
-- [ ] reference: [.well-known/webfinger](https://www.rfc-editor.org/rfc/rfc7033) rfc7033 definition
-- [ ] reference: [acct: URI](https://www.rfc-editor.org/rfc/rfc7565) rfc7565 definition
-- [ ] reference: [Mastodon webfinger](https://docs.joinmastodon.org/spec/webfinger/)
-- [ ] reference: [avatar and profile-page](https://webfinger.net/) webfinger link relations
-- [ ] reference: [existing link relations](https://microformats.org/wiki/existing-rel-values)
-- [ ] reference: [.well-known/host-meta](https://www.rfc-editor.org/rfc/rfc6415.html) rfc6415 definition
-- [ ] reference: [.well-known/host-meta.json](https://www.rfc-editor.org/rfc/rfc6415.html#appendix-A) JRD format
-- [ ] reference: webfinger response should use Access-Control-Allow-Origin: *
-- [ ] webfinger: es6 exported function emitting rfc 7033 formatted data
+- [x] implement learnings ...
+- [x] reference: [.well-known/webfinger](https://www.rfc-editor.org/rfc/rfc7033) rfc7033 definition
+- [x] reference: [acct: URI](https://www.rfc-editor.org/rfc/rfc7565) rfc7565 definition
+- [x] reference: [Mastodon webfinger](https://docs.joinmastodon.org/spec/webfinger/)
+- [x] reference: [avatar and profile-page](https://webfinger.net/) webfinger link relations
+- [x] reference: [existing link relations](https://microformats.org/wiki/existing-rel-values)
+- [x] reference: [.well-known/host-meta](https://www.rfc-editor.org/rfc/rfc6415.html) rfc6415 definition
+- [x] reference: [.well-known/host-meta.json](https://www.rfc-editor.org/rfc/rfc6415.html#appendix-A) JRD format
+- [x] reference: webfinger response should use Access-Control-Allow-Origin: *
+- [x] example template for webfinger output: ./tmp/webfinger-template.json
+- [x] webfinger: es6 exported function emitting rfc 7033 formatted data
 - [ ] - create unit test to validate formatting
 - [ ] - create unit test to validate data retrieval
 - [ ] - create intregration test with Mocha+Chai to validate proper HTTP responses
-- [ ] webfinger client: sending a query to a remote host
-- [ ] webfinger server: responding to a query about a local resource
+- [x] webfinger client: sending a query to a remote host
+- [x] webfinger server: responding to a query about a local resource
 - [ ] host-meta: es6 exported function emitting rfc 6415 formated host meta data
 - [ ] - create unit test to validate json formatting
 - [ ] - create unit test to validate data retrieval
 - [ ] - create integration test with Mocha+Chai to validate proper HTTP responses
-- [ ] get: a functional wrapper around node:http(s) get function to be used by webfinger
+- [x] get: a functional wrapper around node:http(s) get function to be used by webfinger
 - [ ] - create unit test to send HTTP GET requests to a given URL
 - [ ] - create integration test with Mocha+Chai_Http to send GET requests
-- [ ] post: a functional wrapper around node:http(s) request function to be used by webfinger
+- [x] post: a functional wrapper around node:http(s) request function to be used by webfinger
 - [ ] - create unit test to send HTTP POST requests to a given URL
 - [ ] - create integration test with Mocha+Chai_Http to send POST requets
 
@@ -29,5 +30,5 @@
 - [ ] set up Mocha test framework
 - [ ] set up Chai, Chai HTTP
 - [ ] set up Koa testing / stub app server
-- [ ] [live webfinger acct: URI](https://social.treehouse.systems/.well-known/webfinger?resource=acct:mattduffy@social.treehouse.systems)
+- [ ] [remote webfinger acct: URI](https://social.bocial.org/.well-known/webfinger?resource=acct:dattmuffy@social.bocial.org)
 - [ ] 

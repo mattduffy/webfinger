@@ -6,10 +6,10 @@
 
 import EventEmitter from 'node:events'
 import Debug from 'debug'
+import get from './get.js'
 
-const error = Debug('webfinger:class:error')
-const log = Debug('webfinger:class:log')
-log.log = console.log.bind(console)
+const error = Debug('webfinger:class_error')
+const log = Debug('webfinger:class_log')
 
 /**
  * A class providing Webfinger rfc-7033 support.
@@ -44,7 +44,9 @@ export default class Webfinger extends EventEmitter {
     this._host = options?.host || `http://${process.env.HOST}:${process.env.PORT}`
     this._username = options?.username
 
-    // TODO: stuff for making webfinger request to remote server
+    this._localHost = process.env.HOST
+    this._localPort = process.env.PORT
+    this._localDomainName = process.env.DOMAIN_NAME
   }
 
   /**
@@ -63,34 +65,52 @@ export default class Webfinger extends EventEmitter {
       error('Missing required username to finger.')
       throw new Error('Missing required username to finger.')
     }
-    const user = username || this._username
+    const user = username || this._username[1]
+    let foundUser
+    const localAcct = new RegExp(`(${this._localHost}|${this._localDomainName})`)
+    const isLocal = localAcct.test(this._username[2])
+
     try {
-      const foundUser = await this._db.findOne({ username: user })
-      if (!foundUser) {
-        return null
+      if (isLocal) {
+        // finger acct local to this server
+        foundUser = await this._db.findOne({ username: user })
+        if (!foundUser) {
+          return null
+        }
+        this.subject()
+        this.aliases(`${this._host}/@${this._username[2]}`)
+        this.aliases(`${this._host}/user/${this._username[2]}`)
+        this.links({
+          rel: 'http://webfinger.net/rel/profile-page',
+          type: 'text/html; charset=utf-8',
+          href: `${this._host}/@${this._username[2]}`,
+        })
+        this.links({
+          rel: 'http://webfinger.net/rel/avatar',
+          type: 'image',
+          href: foundUser.avatar,
+        })
+        this.links({
+          rel: 'self',
+          type: 'application/activity+json',
+          href: `${this._host}/user/${this._username[2]}`,
+        })
+        this.links({
+          rel: 'http://ostatus.org/schema/1.0/subscribe',
+          template: `${this._host}/authorize_interaction?uri={uri}`,
+        })
+      } else {
+        // finger acct from a remote server
+        const remoteFinger = `https://${this._username[2]}/.well-known/webfinger?resource=${this._username.input}`
+        error(`remote finger: ${remoteFinger}`)
+        const finger = await get(remoteFinger)
+        if (finger.statusCode === 200) {
+          foundUser = finger.content
+        } else {
+          foundUser = null
+        }
+        return foundUser
       }
-      this.subject()
-      this.aliases(`${this._host}/@${this._username}`)
-      this.aliases(`${this._host}/user/${this._username}`)
-      this.links({
-        rel: 'http://webfinger.net/rel/profile-page',
-        type: 'text/html; charset=utf-8',
-        href: `${this._host}/@${this._username}`,
-      })
-      this.links({
-        rel: 'http://webfinger.net/rel/avatar',
-        type: 'image',
-        href: foundUser.avatar,
-      })
-      this.links({
-        rel: 'self',
-        type: 'application/activity+json',
-        href: `${this._host}/user/${this._username}`,
-      })
-      this.links({
-        rel: 'http://ostatus.org/schema/1.0/subscribe',
-        template: `${this._host}/authorize_interaction?uri={uri}`,
-      })
     } catch (e) {
       error(`Caught error during local finger request: ${e}`)
       return null
@@ -107,7 +127,7 @@ export default class Webfinger extends EventEmitter {
     } else {
       host = this._host
     }
-    this.#finger.subject = `acct:${this._username}@${host}`
+    this.#finger.subject = `acct:${this._username[1]}@${host}`
   }
 
   aliases(alias) {
