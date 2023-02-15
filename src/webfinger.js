@@ -87,6 +87,10 @@ export default class Webfinger extends EventEmitter {
         type: 'application/activity+json',
         href: `${this._host}/user/${this._username}`,
       })
+      this.links({
+        rel: 'http://ostatus.org/schema/1.0/subscribe',
+        template: `${this._host}/authorize_interaction?uri={uri}`,
+      })
     } catch (e) {
       error(`Caught error during local finger request: ${e}`)
       return null

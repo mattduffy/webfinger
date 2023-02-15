@@ -10,11 +10,6 @@ import post from './post.js'
 import Webfinger from './webfinger.js'
 // import Hostmeta from './host-meta.js'
 
-// const error = Debug('webfinger:main:error')
-// const log = Debug('webfinger:main:log')
-
-// const webfinger = new Webfinger()
-
 function wellknownWebfinger(options, application) {
   const err = Debug('webfinger:wellknown_error')
   const log = Debug('webfinger:wellknown_log')
@@ -44,8 +39,9 @@ function wellknownWebfinger(options, application) {
 
     if (/^\/\.well-known\/webfinger/.test(ctx.request.path)) {
       try {
-        const re = new RegExp(`^acct:([^\\s][A-Za-z0-9_-]{2,30})@${ctx.app.domain}$`)
-        const username = re.exec(ctx.request.query.resource)
+        // const re = new RegExp(`^acct:([^\\s][A-Za-z0-9_-]{2,30})(?:@)?(${ctx.app.domain}|${process.env.HOST})?$`)
+        const re = new RegExp(`^acct:([^\\s][A-Za-z0-9_-]{2,30})(?:@)?([^\\s].*)?$`)
+        const username = re.exec(ctx.request.query?.resource)
         if (!ctx.request.query.resource || !username) {
           err('Missing resource query parameter.')
           ctx.status = 400
@@ -53,10 +49,28 @@ function wellknownWebfinger(options, application) {
           ctx.body = 'Bad request'
           // throw new Error('Missing resource query parameter.')
         } else {
-          const db = ctx.state.mongodb.client.db()
-          const users = db.collection('users')
-          const finger = new Webfinger({ db: users, username: username[1], local: true })
-          const found = await finger.finger()
+          log(username)
+          const host = process.env.HOST
+          const domain = process.env.DOMAIN_NAME
+          const localAcct = new RegExp(`(${host}|${domain})`)
+          const isLocal = localAcct.test(username[2])
+          let found
+          if (!isLocal) {
+            // webfinger a request to a remote server
+            const remoteFinger = `https://${username[2]}/.well-known/webfinger?resource=${username.input}`
+            err(remoteFinger)
+            const finger = await get(remoteFinger)
+            if (finger.statusCode === 200) {
+              found = finger.content
+            } else {
+              found = false
+            }
+          } else {
+            const db = ctx.state.mongodb.client.db()
+            const users = db.collection('users')
+            const finger = new Webfinger({ db: users, username: username[1], local: isLocal })
+            found = await finger.finger()
+          }
           if (!found) {
             ctx.status = 404
             ctx.type = 'text/plain; charset=utf-8'
