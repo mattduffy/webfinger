@@ -8,11 +8,59 @@ import Debug from 'debug'
 import get from './get.js'
 import post from './post.js'
 import Webfinger from './webfinger.js'
-// import Hostmeta from './host-meta.js'
+import Hostmeta from './host-meta.js'
+
+function wellknownHostmeta(options, application) {
+  const error = Debug('webfinger:wellknown:hostmeta_error')
+  const log = Debug('webfinger:wellknown:hostmeta_log')
+  let app
+  let opts
+  if (options && typeof options.use === 'function') {
+    opts = application
+    app = options
+  } else {
+    opts = options
+    app = application
+  }
+  if (!app || typeof app.use !== 'function') {
+    error('Required app instance not provided')
+    throw new Error('Required app instance not provided')
+  }
+  log('Adding the /.well-known/host-meta route to the app.')
+
+  return async function hostmeta(ctx, next) {
+    // Doesn't seem like anything other than Mastodon relies on this anymore.
+    // No need to make it do anything other than return the default description
+    // of the webfinger interface.
+    await next()
+    let info
+    if (/^\/\.well-known\/host-meta/.test(ctx.request.path)) {
+      try {
+        const host = `${ctx.request.protocol}://${ctx.request.host}`
+        const o = { path: ctx.request.path, host }
+        const meta = new Hostmeta(o)
+        info = meta.info()
+        if (!info) {
+          ctx.status = 400
+          ctx.type = 'text/plain; charset=utf8'
+          ctx.body = 'Bad request'
+        } else {
+          ctx.status = 200
+          ctx.type = info.type
+          ctx.body = info.body
+        }
+      } catch (e) {
+        ctx.status = 500
+        error(e)
+        throw new Error(e)
+      }
+    }
+  }
+}
 
 function wellknownWebfinger(options, application) {
-  const error = Debug('webfinger:wellknown_error')
-  const log = Debug('webfinger:wellknown_log')
+  const error = Debug('webfinger:wellknown:webfinger_error')
+  const log = Debug('webfinger:wellknown:webfinger_log')
   let app
   let opts
   if (options && typeof options.use === 'function') {
@@ -48,13 +96,20 @@ function wellknownWebfinger(options, application) {
           ctx.body = 'Bad request'
         } else {
           // log(username)
-          const host = process.env.HOST
-          const domain = process.env.DOMAIN_NAME
-          const localAcct = new RegExp(`(${host}|${domain})`)
+          // const host = process.env.HOST
+          // const domain = process.env.DOMAIN_NAME
+          // const localAcct = new RegExp(`(${host}|${domain})`)
+          const { host, protocol } = ctx.request
+          const localAcct = new RegExp(`(${host})`)
           const isLocal = localAcct.test(username[2])
           const db = ctx.state.mongodb.client.db()
           const users = db.collection('users')
-          const o = { db: users, username, local: isLocal }
+          const o = {
+            db: users,
+            username,
+            local: isLocal,
+            host: `${protocol}://${host}`,
+          }
           const finger = new Webfinger(o)
           const found = await finger.finger()
           if (!found) {
@@ -79,6 +134,8 @@ function wellknownWebfinger(options, application) {
 export {
   get,
   post,
+  Hostmeta,
   Webfinger,
+  wellknownHostmeta,
   wellknownWebfinger,
 }
