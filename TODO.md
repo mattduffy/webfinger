@@ -25,6 +25,8 @@
 - [x] post: a functional wrapper around node:http(s) request function to be used by webfinger
 - [ ] - create unit test to send HTTP POST requests to a given URL
 - [ ] - create integration test with Mocha+Chai_Http to send POST requets
+- [ ] DB: provide a more abstract interface to database for issuing local queries.
+- [ ] DB: provide a way to support Redis database queries.
 
 ## TESTING
 - [ ] set up Mocha test framework

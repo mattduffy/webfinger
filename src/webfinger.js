@@ -1,6 +1,5 @@
 /**
- * @module @mattduffy/webfinger
- * @author Matthew Duffy <mattduffy@gmail.com>
+ * @module @mattduffy/webfinger @author Matthew Duffy <mattduffy@gmail.com>
  * @file src/webfinger.js The Webfinger class definition file.
  */
 
@@ -78,12 +77,12 @@ export default class Webfinger extends EventEmitter {
           return null
         }
         this.subject()
-        this.aliases(`${this._host}/@${this._username[2]}`)
-        this.aliases(`${this._host}/user/${this._username[2]}`)
+        this.aliases(`${this._host}/@${this._username[1]}`)
+        this.aliases(`${this._host}/user/${this._username[1]}`)
         this.links({
           rel: 'http://webfinger.net/rel/profile-page',
           type: 'text/html; charset=utf-8',
-          href: `${this._host}/@${this._username[2]}`,
+          href: `${this._host}/@${this._username[1]}`,
         })
         this.links({
           rel: 'http://webfinger.net/rel/avatar',
@@ -93,7 +92,7 @@ export default class Webfinger extends EventEmitter {
         this.links({
           rel: 'self',
           type: 'application/activity+json',
-          href: `${this._host}/user/${this._username[2]}`,
+          href: `${this._host}/user/${this._username[1]}`,
         })
         this.links({
           rel: 'http://ostatus.org/schema/1.0/subscribe',
