@@ -84,14 +84,14 @@ user123 not found
 
 
 ### Webfinger 
-It is possible to directly import the Webfinger class that is used by the middleware function to manually make webfinger queries.
+It is possible to directly import the Webfinger class that is used by the middleware function, to manually make webfinger queries.  Once an instance has been created, use the ```finger()``` method to make the query.  This is an **Async/Await** method.
 ```javascript
 import { Webfinger } from '@mattduffy/webfinger'
 const options = {
   // fill in the required options needed to make queries...
 }
-const wf = new Webfinger(options)
-const user1 = await wf.finger()
+const web = new Webfinger(options)
+const user1 = await web.finger()
 ```
 
 ### Get
