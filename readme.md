@@ -8,6 +8,7 @@ This package for Node.js exports a middleware function for Koa applications that
 import { wellknownWebfinger } from '@mattduffy/webfinger'
 // add to exisiting koa app instance
 const options = {
+  // TODO
   // mongodb = <mongodbClient|null>,
   // redis = <redisClient|null>,
   // hostname = example.org,
@@ -92,6 +93,45 @@ const options = {
 }
 const web = new Webfinger(options)
 const user1 = await web.finger()
+```
+
+### Host-Meta
+Host-Meta does not seem to really be much of a thing anymore.  Mastodon might be the main consumer of host-meta queries, but even then, I don't think it is completely required.  In order to provide a Mastodon-compatible version of Webfinger, this package also includes a Koa appliation middlware function that is able to return either ```xrd+xml``` or ```jrd+json``` responses.
+```javascript
+import { wellknownHostmeta } from '@mattduffy/webfinger'
+app.use(wellknownHostmeta({}, app))
+```
+An HTTP GET request to ```https://social.example.org/.well-known/host-meta``` will return the following output:
+```javascript
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Vary: Origin
+
+<?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
+  <Link rel="lrdd" template="https:///social.example.org/.well-known/webfinger?resource={uri}"/>
+</XRD>
+```
+But, really, nobody should be using XML at this point, so the better option is to request JSON output:
+```https://social.example.org/.well-known/host-meta.json```
+```javascript
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Vary: Origin
+
+{
+    "links": [
+        {
+            "rel": "lrdd",
+            "template": "https:///social.example.org/.well-known/webfinger?resource={uri}"
+        }
+    ]
+}
 ```
 
 ### Get
