@@ -15,7 +15,7 @@
 - [ ] - create intregration test with Mocha+Chai to validate proper HTTP responses
 - [x] webfinger client: sending a query to a remote host
 - [x] webfinger server: responding to a query about a local resource
-- [ ] host-meta: es6 exported function emitting rfc 6415 formated host meta data
+- [x] host-meta: es6 exported function emitting rfc 6415 formated host meta data
 - [ ] - create unit test to validate json formatting
 - [ ] - create unit test to validate data retrieval
 - [ ] - create integration test with Mocha+Chai to validate proper HTTP responses

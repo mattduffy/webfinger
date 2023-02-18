@@ -10,7 +10,7 @@ import post from './post.js'
 import Webfinger from './webfinger.js'
 import Hostmeta from './host-meta.js'
 
-function wellknownHostmeta(options, application) {
+function wellknownHostmeta(options = {}, application = null) {
   const error = Debug('webfinger:wellknown:hostmeta_error')
   const log = Debug('webfinger:wellknown:hostmeta_log')
   let app
@@ -32,7 +32,7 @@ function wellknownHostmeta(options, application) {
     // Doesn't seem like anything other than Mastodon relies on this anymore.
     // No need to make it do anything other than return the default description
     // of the webfinger interface.
-    await next()
+    // await next()
     let info
     if (/^\/\.well-known\/host-meta/.test(ctx.request.path)) {
       try {
@@ -54,6 +54,8 @@ function wellknownHostmeta(options, application) {
         error(e)
         throw new Error(e)
       }
+    } else {
+      await next()
     }
   }
 }
@@ -77,7 +79,7 @@ function wellknownWebfinger(options, application) {
   log('Adding the /.well-known/webfinger route to the app.')
 
   return async function webfinger(ctx, next) {
-    await next()
+    // await next()
     if (!ctx.state.mongodb) {
       error('Missing db connection')
       ctx.status = 500
@@ -87,7 +89,7 @@ function wellknownWebfinger(options, application) {
 
     if (/^\/\.well-known\/webfinger/.test(ctx.request.path)) {
       try {
-        const re = new RegExp(`^acct:([^\\s][A-Za-z0-9_-]{2,30})(?:@)?([^\\s].*)?$`)
+        const re = /^acct:([^\\s][A-Za-z0-9_-]{2,30})(?:@)?([^\\s].*)?$/
         const username = re.exec(ctx.request.query?.resource)
         if (!ctx.request.query.resource || !username) {
           error('Missing resource query parameter.')
@@ -95,10 +97,6 @@ function wellknownWebfinger(options, application) {
           ctx.type = 'text/plain; charset=utf-8'
           ctx.body = 'Bad request'
         } else {
-          // log(username)
-          // const host = process.env.HOST
-          // const domain = process.env.DOMAIN_NAME
-          // const localAcct = new RegExp(`(${host}|${domain})`)
           const { host, protocol } = ctx.request
           const localAcct = new RegExp(`(${host})`)
           const isLocal = localAcct.test(username[2])
@@ -127,6 +125,8 @@ function wellknownWebfinger(options, application) {
         error(e)
         throw new Error(e)
       }
+    } else {
+      await next()
     }
   }
 }

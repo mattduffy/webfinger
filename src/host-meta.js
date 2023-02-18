@@ -28,9 +28,9 @@ export default class Hostmeta extends EventEmitter {
     this._host = options?.host || 'localhost'
     this._path = options?.path
     this._type = (/.*json?/.test(this._path)) ? 'json' : 'xrd'
-    error('%o', options)
-    error(`ctx path: ${this._path}`)
-    error(`type: ${this._type}`)
+    log('%o', options)
+    log(`ctx path: ${this._path}`)
+    log(`type: ${this._type}`)
     this._meta = { type: null, body: null }
     if (this._type === 'json') {
       this._meta.type = 'application/jrd+json'
