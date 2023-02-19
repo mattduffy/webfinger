@@ -9,6 +9,59 @@ import get from './get.js'
 import post from './post.js'
 import Webfinger from './webfinger.js'
 import Hostmeta from './host-meta.js'
+import NodeInfo from './nodeinfo.js'
+
+function wellknownNodeinfo(options = {}, application = null) {
+  const error = Debug('webfinger:wellknown:nodeinfo_error')
+  const log = Debug('webfinger:wellknown:nodeinfo_log')
+  let app
+  let opts
+  if (options && typeof options.use === 'function') {
+    opts = application
+    app = options
+  } else {
+    opts = options
+    app = application
+  }
+  if (!app || typeof app.use !== 'function') {
+    error('Required app instance not provided')
+    throw new Error('Required app instance not provided')
+  }
+  log('Adding the /.well-known/nodeinfo route to the app.')
+
+  return async function nodeinfo(ctx, next) {
+    if (!ctx.state.mongodb) {
+      error('Missing db connection')
+      ctx.status = 500
+      ctx.type = 'text/plain; charset=utf-8'
+      // throw new Error('Missing db connection')
+    }
+    let info
+    if (/^\/\.well-known\/nodeinfo/.test(ctx.request.path)) {
+      try {
+        const host = `${ctx.request.protocol}://${ctx.request.host}`
+        const o = { db: ctx.state.mongodb.client, host, path: ctx.request.path }
+        const node = new NodeInfo(o)
+        info = await node.info()
+        if (!info) {
+          ctx.status = 400
+          ctx.type = 'text/plain; charset=utf-8'
+          ctx.body = 'Bad request'
+        } else {
+          ctx.status = 200
+          ctx.type = info.type
+          ctx.body = info.body
+        }
+      } catch (e) {
+        ctx.status = 500
+        error(e)
+        throw new Error(e)
+      }
+    } else {
+      await next()
+    }
+  }
+}
 
 function wellknownHostmeta(options = {}, application = null) {
   const error = Debug('webfinger:wellknown:hostmeta_error')
@@ -134,8 +187,10 @@ function wellknownWebfinger(options, application) {
 export {
   get,
   post,
+  NodeInfo,
   Hostmeta,
   Webfinger,
+  wellknownNodeinfo,
   wellknownHostmeta,
   wellknownWebfinger,
 }

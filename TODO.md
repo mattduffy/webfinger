@@ -10,21 +10,23 @@
 - [x] reference: webfinger response should use Access-Control-Allow-Origin: *
 - [x] example template for webfinger output: ./tmp/webfinger-template.json
 - [x] webfinger: es6 exported function emitting rfc 7033 formatted data
-- [ ] - create unit test to validate formatting
-- [ ] - create unit test to validate data retrieval
-- [ ] - create intregration test with Mocha+Chai to validate proper HTTP responses
+- [ ] ↳ create unit test to validate formatting
+- [ ] ↳ create unit test to validate data retrieval
+- [ ] ↳ create intregration test with Mocha+Chai to validate proper HTTP responses
 - [x] webfinger client: sending a query to a remote host
 - [x] webfinger server: responding to a query about a local resource
 - [x] host-meta: es6 exported function emitting rfc 6415 formated host meta data
-- [ ] - create unit test to validate json formatting
-- [ ] - create unit test to validate data retrieval
-- [ ] - create integration test with Mocha+Chai to validate proper HTTP responses
+- [ ] ↳ create unit test to validate json formatting
+- [ ] ↳ create unit test to validate data retrieval
+- [ ] ↳ create integration test with Mocha+Chai to validate proper HTTP responses
+- [ ] nodeinfo server: responding to a query about local server versions / statistics
+- [ ] ↳ create a unit test to validate jrd+json response
 - [x] get: a functional wrapper around node:http(s) get function to be used by webfinger
-- [ ] - create unit test to send HTTP GET requests to a given URL
-- [ ] - create integration test with Mocha+Chai_Http to send GET requests
+- [ ] ↳ create unit test to send HTTP GET requests to a given URL
+- [ ] ↳ create integration test with Mocha+Chai_Http to send GET requests
 - [x] post: a functional wrapper around node:http(s) request function to be used by webfinger
-- [ ] - create unit test to send HTTP POST requests to a given URL
-- [ ] - create integration test with Mocha+Chai_Http to send POST requets
+- [ ] ↳ create unit test to send HTTP POST requests to a given URL
+- [ ] ↳ create integration test with Mocha+Chai_Http to send POST requets
 - [ ] DB: provide a more abstract interface to database for issuing local queries.
 - [ ] DB: provide a way to support Redis database queries.
 

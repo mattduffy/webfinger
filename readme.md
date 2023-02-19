@@ -4,6 +4,10 @@ This package for Node.js exports a middleware function for Koa applications that
 
 ### Using Webfinger
 
+```bash
+npm install --save @mattduffy/webfinger
+```
+
 ```javascript
 import { wellknownWebfinger } from '@mattduffy/webfinger'
 // add to exisiting koa app instance
