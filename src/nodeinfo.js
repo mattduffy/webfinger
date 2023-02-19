@@ -28,6 +28,8 @@ export default class NodenIfo extends EventEmitter {
 
   #protocolHref = `https://${this._host}/nodeinfo/2.1`
 
+  #stats = { body: null, type: null }
+
   constructor(options = {}) {
     if (!options?.db) {
       error('Missing required DB connection.')
@@ -39,6 +41,36 @@ export default class NodenIfo extends EventEmitter {
     this._collection = options?.collectionName || 'nodeinfo'
     this._host = options?.host || `http://${process.env.HOST}:${process.env.PORT}`
     this.#protocolHref = `${this._host}/nodeinfo/2.1`
+  }
+
+  /**
+   * Make the nodeinfo request.
+   * @summary Make the nodeinfo request.
+   * @async
+   * @author Matthew Duffy <mattduffy@gmail.com>
+   * @return {Object|null} Object literal containing nodeinfo data or null.
+   */
+  async stats() {
+    if (!this._db) {
+      error('Missing DB connection for nodeinfo request.')
+      throw new Error('Missing DB connection for nodeinfo request.')
+    }
+    let stats
+    try {
+      await this._db.connect()
+      const nodeinfo = this._db.db('mattmadethese').collection('nodeinfo')
+      stats = await nodeinfo.findOne()
+      if (!stats) {
+        return null
+      }
+      this.#stats.body = stats
+      this.#stats.type = 'application/json'
+      // log(this.#stats)
+    } catch (e) {
+      error(`Caught error during nodeinfo statistics request: ${e}`)
+      throw new Error(`Caught error during nodeinfo statistics request: ${e}`)
+    }
+    return this.#stats
   }
 
   /**

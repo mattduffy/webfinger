@@ -19,7 +19,7 @@
 - [ ] ↳ create unit test to validate json formatting
 - [ ] ↳ create unit test to validate data retrieval
 - [ ] ↳ create integration test with Mocha+Chai to validate proper HTTP responses
-- [ ] nodeinfo server: responding to a query about local server versions / statistics
+- [x] nodeinfo server: responding to a query about local server versions / statistics
 - [ ] ↳ create a unit test to validate jrd+json response
 - [x] get: a functional wrapper around node:http(s) get function to be used by webfinger
 - [ ] ↳ create unit test to send HTTP GET requests to a given URL

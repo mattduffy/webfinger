@@ -57,6 +57,20 @@ function wellknownNodeinfo(options = {}, application = null) {
         error(e)
         throw new Error(e)
       }
+    } else if (/^\/nodeinfo\/2\.[0|1]/.test(ctx.request.path)) {
+      const { proto, host } = ctx.request
+      const o = { db: ctx.state.mongodb.client, proto, host }
+      const node = new NodeInfo(o)
+      info = await node.stats()
+      if (!info) {
+        ctx.status = 404
+        ctx.type = 'text/plain; charset=utf-8'
+        ctx.body = 'Not Found'
+      } else {
+        ctx.status = 200
+        ctx.type = info.type
+        ctx.body = info.body
+      }
     } else {
       await next()
     }
