@@ -1,5 +1,6 @@
 /**
- * @module @mattduffy/webfinger @author Matthew Duffy <mattduffy@gmail.com>
+ * @module @mattduffy/webfinger
+ * @author Matthew Duffy <mattduffy@gmail.com>
  * @file src/webfinger.js The Webfinger class definition file.
  */
 
@@ -38,9 +39,9 @@ export default class Webfinger extends EventEmitter {
 
     super()
     log('Webfinger constructor')
-    this._db = options?.db || null
-    this._local = options?.local || true
-    this._host = options?.host || `http://${process.env.HOST}:${process.env.PORT}`
+    this._db = options?.db ?? null
+    this._local = options?.local ?? true
+    this._host = options?.host ?? `http://${process.env.HOST}:${process.env.PORT}`
     this._username = options?.username
 
     this._localHost = process.env.HOST
@@ -64,7 +65,7 @@ export default class Webfinger extends EventEmitter {
       error('Missing required username to finger.')
       throw new Error('Missing required username to finger.')
     }
-    const user = username || this._username[1]
+    const user = username ?? this._username[1]
     let foundUser
     const localAcct = new RegExp(`(${this._localHost}|${this._localDomainName})`)
     const isLocal = localAcct.test(this._username[2])

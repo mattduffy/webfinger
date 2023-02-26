@@ -25,7 +25,7 @@ export default class Hostmeta extends EventEmitter {
   constructor(options = {}) {
     super()
     log('host-meta constructor')
-    this._host = options?.host || 'localhost'
+    this._host = options?.host ?? 'localhost'
     this._path = options?.path
     this._type = (/.*json?/.test(this._path)) ? 'json' : 'xrd'
     log('%o', options)

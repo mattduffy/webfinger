@@ -37,9 +37,9 @@ export default class NodenIfo extends EventEmitter {
     }
     super()
     log('Nodeinfo constructor')
-    this._db = options?.db || null
-    this._collection = options?.collectionName || 'nodeinfo'
-    this._host = options?.host || `http://${process.env.HOST}:${process.env.PORT}`
+    this._db = options?.db ?? null
+    this._collection = options?.collectionName ?? 'nodeinfo'
+    this._host = options?.host ?? `http://${process.env.HOST}:${process.env.PORT}`
     this.#protocolHref = `${this._host}/nodeinfo/2.1`
   }
 

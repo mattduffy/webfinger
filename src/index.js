@@ -1,7 +1,7 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/index.js The Webfinger class definition file.
+ * @file src/index.js The Webfinger package entrypoint.
  */
 
 import Debug from 'debug'
@@ -34,7 +34,7 @@ function wellknownNodeinfo(options = {}, application = null) {
       error('Missing db connection')
       ctx.status = 500
       ctx.type = 'text/plain; charset=utf-8'
-      // throw new Error('Missing db connection')
+      throw new Error('Missing db connection')
     }
     let info
     if (/^\/\.well-known\/nodeinfo/.test(ctx.request.path)) {
@@ -57,7 +57,7 @@ function wellknownNodeinfo(options = {}, application = null) {
         error(e)
         throw new Error(e)
       }
-    } else if (/^\/nodeinfo\/2\.[0|1]/.test(ctx.request.path)) {
+    } else if (/^\/nodeinfo\/2\.1/.test(ctx.request.path)) {
       const { proto, host } = ctx.request
       const o = { db: ctx.state.mongodb.client, proto, host }
       const node = new NodeInfo(o)
