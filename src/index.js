@@ -173,7 +173,8 @@ function wellknownWebfinger(options, application) {
             db: users,
             username,
             local: isLocal,
-            host: `${protocol}://${host}`,
+            protocol: `${protocol}`,
+            host: `${host}`,
           }
           const finger = new Webfinger(o)
           const found = await finger.finger()

@@ -41,7 +41,9 @@ export default class Webfinger extends EventEmitter {
     log('Webfinger constructor')
     this._db = options?.db ?? null
     this._local = options?.local ?? true
-    this._host = options?.host ?? `http://${process.env.HOST}:${process.env.PORT}`
+    this._protocol = options?.protocol ?? 'http'
+    this._host = options?.host ?? `${process.env.HOST}:${process.env.PORT}`
+    this._hostname = `${this._protocol}://${this._host}`
     this._username = options?.username
 
     this._localHost = process.env.HOST
@@ -78,12 +80,12 @@ export default class Webfinger extends EventEmitter {
           return null
         }
         this.subject()
-        this.aliases(`${this._host}/@${this._username[1]}`)
-        this.aliases(`${this._host}/user/${this._username[1]}`)
+        this.aliases(`${this._hostname}/@${this._username[1]}`)
+        this.aliases(`${this._hostname}/user/${this._username[1]}`)
         this.links({
           rel: 'http://webfinger.net/rel/profile-page',
           type: 'text/html; charset=utf-8',
-          href: `${this._host}/@${this._username[1]}`,
+          href: `${this._hostname}/@${this._username[1]}`,
         })
         this.links({
           rel: 'http://webfinger.net/rel/avatar',
@@ -93,11 +95,11 @@ export default class Webfinger extends EventEmitter {
         this.links({
           rel: 'self',
           type: 'application/activity+json',
-          href: `${this._host}/user/${this._username[1]}`,
+          href: `${this._hostname}/user/${this._username[1]}`,
         })
         this.links({
           rel: 'http://ostatus.org/schema/1.0/subscribe',
-          template: `${this._host}/authorize_interaction?uri={uri}`,
+          template: `${this._hostname}/authorize_interaction?uri={uri}`,
         })
       } else {
         // finger acct from a remote server
@@ -119,13 +121,13 @@ export default class Webfinger extends EventEmitter {
   }
 
   subject() {
-    const match = /^http[s]?:\/\/([A-Za-z0-9\\._-]+):?[0-9]{0,6}$/.exec(this._host)
+    const match = /^http[s]?:\/\/([A-Za-z0-9\\._-]+):?[0-9]{0,6}$/.exec(this._hostname)
     let host
     if (match) {
       /* eslint-disable prefer-destructuring */
       host = match[1]
     } else {
-      host = this._host
+      host = this._hostname
     }
     this.#finger.subject = `acct:${this._username[1]}@${host}`
   }
