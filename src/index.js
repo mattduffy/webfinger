@@ -175,6 +175,7 @@ function wellknownWebfinger(options, application) {
             local: isLocal,
             protocol: `${protocol}`,
             host: `${host}`,
+            imgDir: app.publicDir,
           }
           const finger = new Webfinger(o)
           const found = await finger.finger()

@@ -7,6 +7,7 @@
 import EventEmitter from 'node:events'
 import Debug from 'debug'
 import get from './get.js'
+import filetype from './filetype.js'
 
 const error = Debug('webfinger:class_error')
 const log = Debug('webfinger:class_log')
@@ -46,6 +47,7 @@ export default class Webfinger extends EventEmitter {
     this._hostname = `${this._protocol}://${this._host}`
     this._username = options?.username
 
+    this._imgDir = options?.imgDir ?? null
     this._localHost = process.env.HOST
     this._localPort = process.env.PORT
     this._localDomainName = process.env.DOMAIN_NAME
@@ -87,9 +89,11 @@ export default class Webfinger extends EventEmitter {
           type: 'text/html; charset=utf-8',
           href: `${this._hostname}/@${this._username[1]}`,
         })
+        const avatarFile = `${this._imgDir}/${/http.*(i\/accounts\/avatars\/.*)/.exec(foundUser.avatar)[1]}`
+        const mimetype = await filetype(avatarFile)
         this.links({
           rel: 'http://webfinger.net/rel/avatar',
-          type: 'image',
+          type: mimetype.type,
           href: foundUser.avatar,
         })
         this.links({
