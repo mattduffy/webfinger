@@ -164,15 +164,19 @@ function wellknownWebfinger(options, application) {
           ctx.type = 'text/plain; charset=utf-8'
           ctx.body = 'Bad request'
         } else {
-          const { host, protocol } = ctx.request
+          const { origin, host, protocol } = ctx.request
           const localAcct = new RegExp(`(${host})`)
-          const isLocal = localAcct.test(username[2])
+          let isLocal = false
+          if (username[2] === undefined || localAcct.test(username[2])) {
+            isLocal = true
+          }
           const db = ctx.state.mongodb.client.db()
           const users = db.collection('users')
           const o = {
             db: users,
             username,
             local: isLocal,
+            origin,
             protocol: `${protocol}`,
             host: `${host}`,
             imgDir: app.publicDir,

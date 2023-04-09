@@ -45,6 +45,7 @@ export default class Webfinger extends EventEmitter {
     this._protocol = options?.protocol ?? 'http'
     this._host = options?.host ?? `${process.env.HOST}:${process.env.PORT}`
     this._hostname = `${this._protocol}://${this._host}`
+    this._origin = options?.origin ?? null
     this._username = options?.username
 
     this._imgDir = options?.imgDir ?? null
@@ -72,7 +73,8 @@ export default class Webfinger extends EventEmitter {
     const user = username ?? this._username[1]
     let foundUser
     const localAcct = new RegExp(`(${this._localHost}|${this._localDomainName})`)
-    const isLocal = localAcct.test(this._username[2])
+    // const isLocal = localAcct.test(this._username[2])
+    const isLocal = this._local
 
     try {
       if (isLocal) {
@@ -82,28 +84,39 @@ export default class Webfinger extends EventEmitter {
           return null
         }
         this.subject()
-        this.aliases(`${this._hostname}/@${this._username[1]}`)
-        this.aliases(`${this._hostname}/user/${this._username[1]}`)
+        // this.aliases(`${this._hostname}/@${this._username[1]}`)
+        this.aliases(`${this._origin}/@${this._username[1]}`)
+        // this.aliases(`${this._hostname}/user/${this._username[1]}`)
+        this.aliases(`${this._origin}/user/${this._username[1]}`)
         this.links({
           rel: 'http://webfinger.net/rel/profile-page',
           type: 'text/html; charset=utf-8',
-          href: `${this._hostname}/@${this._username[1]}`,
+          href: `${this._origin}/@${this._username[1]}`,
         })
-        const avatarFile = `${this._imgDir}/${/http.*(i\/accounts\/avatars\/.*)/.exec(foundUser.avatar)[1]}`
+        // const avatarFile = `${this._imgDir}/${/http.*(i\/accounts\/avatars\/.*)/.exec(foundUser.avatar)[1]}`
+        let avatarFile
+        let avatarPath
+        if (foundUser.avatar !== '') {
+          avatarFile = `${this._imgDir}/${foundUser.avatar}`
+          avatarPath = `${this._origin}/${foundUser.avatar}`
+        } else {
+          avatarFile = `${this._imgDir}/i/accounts/avatars/missing.png`
+          avatarPath = `${this._origin}/i/accounts/avatars/missing.png`
+        }
         const mimetype = await filetype(avatarFile)
         this.links({
           rel: 'http://webfinger.net/rel/avatar',
           type: mimetype.type,
-          href: foundUser.avatar,
+          href: avatarPath,
         })
         this.links({
           rel: 'self',
           type: 'application/activity+json',
-          href: `${this._hostname}/user/${this._username[1]}`,
+          href: `${this._origin}/user/${this._username[1]}`,
         })
         this.links({
           rel: 'http://ostatus.org/schema/1.0/subscribe',
-          template: `${this._hostname}/authorize_interaction?uri={uri}`,
+          template: `${this._origin}/authorize_interaction?uri={uri}`,
         })
       } else {
         // finger acct from a remote server
