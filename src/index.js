@@ -53,9 +53,10 @@ function wellknownNodeinfo(options = {}, application = null) {
           ctx.body = info.body
         }
       } catch (e) {
-        ctx.status = 500
         error(e)
-        throw new Error(e)
+        ctx.status = 500
+        // throw new Error(e)
+        ctx.throw(500, 'Nodeinfo failure - 100', e)
       }
     } else if (/^\/nodeinfo\/2\.1/.test(ctx.request.path)) {
       const { proto, host } = ctx.request
@@ -72,7 +73,12 @@ function wellknownNodeinfo(options = {}, application = null) {
         ctx.body = info.body
       }
     } else {
-      await next()
+      try {
+        await next()
+      } catch (e) {
+        error('Nodeinfo failure - 200')
+        ctx.throw(500, 'Nodeifo failure - 200', e)
+      }
     }
   }
 }
@@ -99,7 +105,6 @@ function wellknownHostmeta(options = {}, application = null) {
     // Doesn't seem like anything other than Mastodon relies on this anymore.
     // No need to make it do anything other than return the default description
     // of the webfinger interface.
-    // await next()
     let info
     if (/^\/\.well-known\/host-meta/.test(ctx.request.path)) {
       try {
@@ -117,12 +122,18 @@ function wellknownHostmeta(options = {}, application = null) {
           ctx.body = info.body
         }
       } catch (e) {
-        ctx.status = 500
         error(e)
-        throw new Error(e)
+        ctx.status = 500
+        // throw new Error(e)
+        ctx.throw(500, 'Hostmeta failure - 100', e)
       }
     } else {
-      await next()
+      try {
+        await next()
+      } catch (e) {
+        error('Hostmeta failure - 200')
+        ctx.throw(500, 'Hostmeta failure - 200', e)
+      }
     }
   }
 }
@@ -146,7 +157,6 @@ function wellknownWebfinger(options, application) {
   log('Adding the /.well-known/webfinger route to the app.')
 
   return async function webfinger(ctx, next) {
-    // await next()
     if (!ctx.state.mongodb) {
       error('Missing db connection')
       ctx.status = 500
@@ -194,12 +204,19 @@ function wellknownWebfinger(options, application) {
           }
         }
       } catch (e) {
-        ctx.status = 500
         error(e)
-        throw new Error(e)
+        ctx.status = 500
+        // throw new Error(e)
+        ctx.throw(500, 'Webfinger failure - 100', e)
       }
     } else {
-      await next()
+      try {
+        await next()
+      } catch (e) {
+        error('Webfinger failure - 200')
+        error(e)
+        ctx.throw(500, 'Webfinger failure - 200', e)
+      }
     }
   }
 }
