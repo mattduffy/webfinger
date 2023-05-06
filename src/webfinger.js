@@ -72,14 +72,17 @@ export default class Webfinger extends EventEmitter {
     }
     const user = username ?? this._username[1]
     let foundUser
-    const localAcct = new RegExp(`(${this._localHost}|${this._localDomainName})`)
+    // const localAcct = new RegExp(`(${this._localHost}|${this._localDomainName})`)
     // const isLocal = localAcct.test(this._username[2])
     const isLocal = this._local
 
     try {
       if (isLocal) {
         // finger acct local to this server
-        foundUser = await this._db.findOne({ username: user })
+        // this is a design problem - too tightly coupled to the actual db collection
+        // and not a more abstract model... shouldn't know anything about user.archived
+        // @TODO - refactor away from raw db query
+        foundUser = await this._db.findOne({ username: user, archived: false })
         if (!foundUser) {
           return null
         }
