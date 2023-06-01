@@ -17,11 +17,17 @@
   "exports": {
     ".": "./src/index.js",
     "./get": "./src/get.js",
+    "./get.js": "./src/get.js",
     "./post": "./src/post.js",
+    "./post.js": "./src/post.js",
     "./nodeinfo": "./src/nodeinfo.js",
+    "./nodeinfo.js": "./src/nodeinfo.js",
     "./filetype": "./src/filetype.js",
+    "./filetype.js": "./src/filetype.js",
     "./webfinger": "./src/webfinger.js",
+    "./webfinger.js": "./src/webfinger.js",
     "./host-meta": "./src/host-meta.js",
+    "./host-meta.js": "./src/host-meta.js",
     "./package.json": "./package.json"
   },
   "scripts": {
