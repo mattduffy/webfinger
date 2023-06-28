@@ -20,6 +20,7 @@ function wellknownNodeinfo(options = {}, application = null) {
     opts = application
     app = options
   } else {
+    /* eslint-disable-next-line no-unused-vars */
     opts = options
     app = application
   }
@@ -92,6 +93,7 @@ function wellknownHostmeta(options = {}, application = null) {
     opts = application
     app = options
   } else {
+    /* eslint-disable-next-line no-unused-vars */
     opts = options
     app = application
   }
@@ -147,6 +149,7 @@ function wellknownWebfinger(options, application) {
     opts = application
     app = options
   } else {
+    /* eslint-disable-next-line no-unused-vars */
     opts = options
     app = application
   }

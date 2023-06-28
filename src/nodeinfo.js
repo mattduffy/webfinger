@@ -48,7 +48,7 @@ export default class NodenIfo extends EventEmitter {
    * @summary Make the nodeinfo request.
    * @async
    * @author Matthew Duffy <mattduffy@gmail.com>
-   * @return {Object|null} Object literal containing nodeinfo data or null.
+   * @return { Object|null } Object literal containing nodeinfo data or null.
    */
   async stats() {
     if (!this._db) {
@@ -77,7 +77,7 @@ export default class NodenIfo extends EventEmitter {
    * Make the nodeinfo request.
    * @summary Make the nodeinfo request.
    * @author Matthew Duffy <mattduffy@gmail.com>
-   * @return {Object|null} Object literal containing nodeinfo data or null.
+   * @return { Object|null } Object literal containing nodeinfo data or null.
    */
   async info() {
     if (!this._db) {

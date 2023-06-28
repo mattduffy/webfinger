@@ -18,8 +18,12 @@ log('Hi, from Webfinger:post')
  * @author Matthew Duffy <mattduffy@gmail.com>
  * @async
  * @param { string|URL } q - Either a string containing the url or an instance of URL.
- * @param { object } postData - Data to be POSTed to the provided URL.
- * @param { object } opts - An object literal with options for how to perform POST request.
+ * @param { Object } postData - Data to be POSTed to the provided URL.
+ * @param { string[] } postData.form
+ * @param { string } postData.text
+ * @param { string } postData.json
+ * @param { Buffer } postData.buffer
+ * @param { Object } opts - An object literal with options for how to perform POST request.
  * @return { Promise } A promise that should immediately resolve with the POST response or reject with error.
  */
 export default async function post(q, postData = {}, opts = {}) {

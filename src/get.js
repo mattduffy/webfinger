@@ -18,7 +18,7 @@ log('Hi, from Webfinger:get')
  * @author Matthew Duffy <mattduffy@gmail.com>
  * @async
  * @param { string|URL } q - Either a string containing the url or an instance of URL.
- * @param { object } opts - An object literal with options for how to perform GET request.
+ * @param { Object } opts - An object literal with options for how to perform GET request.
  * @return { Promise } A promise that should immediately resolve with the GET response or reject with error.
  */
 export default async function get(q, opts = {}) {

@@ -58,8 +58,8 @@ export default class Webfinger extends EventEmitter {
    * Make the webfinger request.
    * @summary Make the webfinger request.
    * @author Matthew Duffy <mattduffy@gmail.com>
-   * @param {string} username - Username to finger.
-   * @return {Object|null} Object literal containing finger data or null.
+   * @param { string } username - Username to finger.
+   * @return { Object|null } Object literal containing finger data or null.
    */
   async finger(username = null) {
     if (this._local && !this._db) {
