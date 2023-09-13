@@ -58,7 +58,7 @@ export default class NodenIfo extends EventEmitter {
     let stats
     try {
       await this._db.connect()
-      const nodeinfo = this._db.db('mattmadethese').collection('nodeinfo')
+      const nodeinfo = this._db.db().collection('nodeinfo')
       stats = await nodeinfo.findOne()
       if (!stats) {
         return null
