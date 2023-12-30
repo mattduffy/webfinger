@@ -69,6 +69,11 @@ export default async function get(q, opts = {}) {
           payload.content = JSON.parse(Buffer.concat(data).toString())
         } else if (response.headers['content-type'] && /text\/plain|html/i.test(response.headers['content-type'])) {
           payload.content = Buffer.concat(data).toString()
+        } else if (response.headers['content-type'] && /image/i.test(response.headers['content-type'])) {
+          log(`GET status: ${response.statusCode}, ${response.statusMessage}, content-type: ${response.headers['content-type']}`)
+          payload.contentType = response.headers['content-type']
+          // https://chrisfrew.in/blog/saving-images-in-node-js-using-fetch-with-array-buffer-and-buffer/
+          payload.buffer = Buffer.concat(data)
         }
         resolve(payload)
       })
