@@ -67,14 +67,18 @@ export default async function get(q, opts = {}) {
         // log('Resonse ended: ')
         if (response.headers['content-type'] && /json/.test(response.headers['content-type'])) {
           payload.content = JSON.parse(Buffer.concat(data).toString())
-        } else if (response.headers['content-type'] && /text\/plain|html/i.test(response.headers['content-type'])) {
+        } else if (response.headers['content-type'] && /text|application\/plain|html|xml/i.test(response.headers['content-type'])) {
           payload.content = Buffer.concat(data).toString()
         } else if (response.headers['content-type'] && /image/i.test(response.headers['content-type'])) {
           log(`GET status: ${response.statusCode}, ${response.statusMessage}, content-type: ${response.headers['content-type']}`)
-          payload.contentType = response.headers['content-type']
           // https://chrisfrew.in/blog/saving-images-in-node-js-using-fetch-with-array-buffer-and-buffer/
           payload.buffer = Buffer.concat(data)
+        } else {
+          // content is not text-based (plain|html|xml|json) and not an image...
+          log(`catch-all for content-type: ${response.headers['content-type']}`)
+          payload.buffer = Buffer.concat(data)
         }
+        payload.contentType = response.headers['content-type']
         resolve(payload)
       })
     }).on('error', (e) => {
