@@ -31,15 +31,18 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "lint": "eslint --",
     "test": "mocha"
   },
   "devDependencies": {
     "chai": "4.3.7",
     "chai-http": "4.3.0",
-    "eslint": "8.28.0",
+    "eslint": "8.57.1",
     "eslint-config-airbnb-base": "15.0.0",
+    "eslint-import-resolver-exports": "1.0.0-beta.5",
     "eslint-plugin-import": "2.26.0",
-    "mocha": "10.8.2"
+    "eslint-restricted-globals": "0.2.0",
+    "mocha": "11.7.5"
   },
   "dependencies": {
     "debug": "4.3.4"
