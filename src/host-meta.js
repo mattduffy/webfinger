@@ -1,13 +1,14 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/host-meta.js The Hostmeta class definition file.
+ * @summary The Hostmeta class definition file.
+ * @file src/host-meta.js
  */
 
 import EventEmitter from 'node:events'
 import Debug from 'debug'
 
-const error = Debug('host-meta:class_error')
+// const error = Debug('host-meta:class_error')
 const log = Debug('host-meta:class_log')
 
 /**

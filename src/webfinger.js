@@ -1,7 +1,8 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/webfinger.js The Webfinger class definition file.
+ * @summary The Webfinger class definition file.
+ * @file src/webfinger.js
  */
 
 import EventEmitter from 'node:events'
@@ -96,7 +97,6 @@ export default class Webfinger extends EventEmitter {
           type: 'text/html; charset=utf-8',
           href: `${this._origin}/@${this._username[1]}`,
         })
-        // const avatarFile = `${this._imgDir}/${/http.*(i\/accounts\/avatars\/.*)/.exec(foundUser.avatar)[1]}`
         let avatarFile
         let avatarPath
         if (foundUser.avatar !== '') {
@@ -123,7 +123,8 @@ export default class Webfinger extends EventEmitter {
         })
       } else {
         // finger acct from a remote server
-        const remoteFinger = `https://${this._username[2]}/.well-known/webfinger?resource=${this._username.input}`
+        const remoteFinger = `https://${this._username[2]}/.well-known/webfinger?resource=`
+          + `${this._username.input}`
         error(`remote finger: ${remoteFinger}`)
         const finger = await get(remoteFinger)
         if (finger.statusCode === 200) {

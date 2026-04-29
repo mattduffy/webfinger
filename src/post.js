@@ -1,7 +1,8 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/post.js A simple HTTPS POST interface.
+ * @summary A simple HTTPS POST interface.
+ * @file src/post.js
  */
 
 import Debug from 'debug'
@@ -24,12 +25,16 @@ log('Hi, from Webfinger:post')
  * @param { string } postData.json
  * @param { Buffer } postData.buffer
  * @param { Object } opts - An object literal with options for how to perform POST request.
- * @return { Promise } A promise that should immediately resolve with the POST response or reject with error.
+ * @return { Promise } A promise that should immediately resolve with the POST response or
+ *                     reject with error.
  */
 export default async function post(q, postData = {}, opts = {}) {
   if (q === undefined) {
     error('Missing required URL parameter')
-    throw new Error('Missing required URL parameter. Usage: await post(\'https://www.example.org\', data[,options])')
+    throw new Error(
+      'Missing required URL parameter. Usage: await post(\'https://www.example.org\', '
+      + 'data[,options])',
+    )
   }
   const theUrl = (typeof q === 'string') ? new URL(q) : q
   log(theUrl)
@@ -88,7 +93,8 @@ export default async function post(q, postData = {}, opts = {}) {
       response.on('end', () => {
         if (response.headers['content-type'] && /json/.test(response.headers['content-type'])) {
           payload.content = JSON.parse(Buffer.concat(data).toString())
-        } else if (response.headers['content-type'] && /text\/plain|html/i.test(response.headers['content-type'])) {
+        } else if (response.headers['content-type']
+          && /text\/plain|html/i.test(response.headers['content-type'])) {
           payload.content = Buffer.concat(data).toString()
         }
         resolve(payload)

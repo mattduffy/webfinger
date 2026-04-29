@@ -1,7 +1,8 @@
 /**
  * @module @mattduffy/webfinger
  * @author Matthew Duffy <mattduffy@gmail.com>
- * @file src/get.js A simple HTTPS GET interface.
+ * @summary A simple HTTPS GET interface.
+ * @file src/get.js
  */
 
 import Debug from 'debug'
@@ -19,13 +20,16 @@ log('Hi, from Webfinger:get')
  * @async
  * @param { string|URL } q - Either a string containing the url or an instance of URL.
  * @param { Object } opts - An object literal with options for how to perform GET request.
- * @return { Promise } A promise that should immediately resolve with the GET response or reject with error.
+ * @return { Promise } A promise that should immediately resolve with the GET response or
+ *                     reject with error.
  */
 export default async function get(q, opts = {}) {
   log(`GETting ${q}`)
   if (q === undefined) {
     error('Missing parameter')
-    throw new Error('Missing required URL parameter. Usage: get(\'https://www.example.org\'[,options])')
+    throw new Error(
+      'Missing required URL parameter. Usage: get(\'https://www.example.org\'[,options])',
+    )
   }
   const theUrl = (typeof q === 'string') ? new URL(q) : q
   log(theUrl)
@@ -67,11 +71,17 @@ export default async function get(q, opts = {}) {
         // log('Resonse ended: ')
         if (response.headers['content-type'] && /json/.test(response.headers['content-type'])) {
           payload.content = JSON.parse(Buffer.concat(data).toString())
-        } else if (response.headers['content-type'] && /text|application\/plain|html|xml/i.test(response.headers['content-type'])) {
+        } else if (response.headers['content-type']
+          && /text|application\/plain|html|xml/i.test(response.headers['content-type'])) {
           payload.content = Buffer.concat(data).toString()
-        } else if (response.headers['content-type'] && /image/i.test(response.headers['content-type'])) {
-          log(`GET status: ${response.statusCode}, ${response.statusMessage}, content-type: ${response.headers['content-type']}`)
-          // https://chrisfrew.in/blog/saving-images-in-node-js-using-fetch-with-array-buffer-and-buffer/
+        } else if (response.headers['content-type']
+          && /image/i.test(response.headers['content-type'])) {
+          log(
+            `GET status: ${response.statusCode}, ${response.statusMessage}, `
+            + `content-type: ${response.headers['content-type']}`,
+          )
+          // https://chrisfrew.in/blog/saving-images-in-node-js-using-fetch-with-array-
+          // buffer-and-buffer/
           payload.buffer = Buffer.concat(data)
         } else {
           // content is not text-based (plain|html|xml|json) and not an image...
