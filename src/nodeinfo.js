@@ -17,7 +17,7 @@ const log = Debug('webfinger:nodeinfo:class_log')
  * @author Matthew Duffy <mattduffy@gmail.com>
  */
 
-export default class NodenIfo extends EventEmitter {
+export default class NodeInfo extends EventEmitter {
   #info = { links: [] }
 
   #protocolVer = '2.1'
